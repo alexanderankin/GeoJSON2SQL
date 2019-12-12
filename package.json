@@ -1,0 +1,25 @@
+{
+  "name": "GeoJSON2SQL",
+  "version": "0.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:alexanderankin/GeoJSON2SQL.git",
+  "author": "David Ankin <daveankin@gmail.com>",
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "test": "mocha",
+    "dbup": "node -p \"var knex = require('knex')({ client: 'mysql', connection: { user: process.env['mysqlu'], password: process.env['mysqlp'], database: 'g2s'}}); require('./lib/schema/up')(knex).then(async () => { await knex.destroy(); console.log('done') })\"",
+    "dbdown": "node -p \"var knex = require('knex')({ client: 'mysql', connection: { user: process.env['mysqlu'], password: process.env['mysqlp'], database: 'g2s'}}); require('./lib/schema/down')(knex).then(async () => { await knex.destroy(); console.log('done') })\""
+  },
+  "dependencies": {
+    "knex": "^0.20.2"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "json-schema-faker": "0.5.0-rc23",
+    "md5": "^2.2.1",
+    "mocha": "^6.2.2",
+    "mysql": "^2.17.1",
+    "sqlite3": "^4.1.0"
+  }
+}
