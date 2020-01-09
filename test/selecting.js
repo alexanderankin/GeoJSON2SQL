@@ -93,10 +93,20 @@ describe.only('selecting', () => {
     });
   });
   
-  describe.skip('MultiPolygon', () => {
+  describe.only('MultiPolygon', () => {
     it('should select MultiPolygon', async () => {
       var inputs = await util.readAllInputsContains('MultiPolygon');
-      expect(true).to.be.ok;
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        var id = await gj2s.db.multipolygon.insert(knex, input);
+        var mpg = await gj2s.db.multipolygon.oneAsGeojson(knex, id);
+
+        input.coordinates = input.coordinates.map(i => {
+          return i.map(j => j.map(k => k.slice(0, 3)))
+        });
+
+        expect(mpg).to.eql(input);
+      }
     });
   });
   
