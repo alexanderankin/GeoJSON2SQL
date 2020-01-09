@@ -12,42 +12,27 @@ describe.only('selecting', () => {
     it('should select Feature', async () => {
       var inputs = await util.readAllInputsContains('Feature');
       for (var i = 0; i < inputs.length; i++) {
-        // if (i != (8))
-        //   continue;
         var input = inputs[i];
         var id = await gj2s.db.feature.insert(knex, input);
         var ft = await gj2s.db.feature.oneAsGeojson(knex, id);
 
-        // console.log(JSON.stringify(input, null, 4));
-        // console.log(JSON.stringify(ft, null, 4));
-        // continue;
-        // if (i > 8)
-        //   break;
-
         function isArrayAndAllNumbers(arr) {
-          if (Array.isArray(arr)) {
-            for (var i = 0; i < arr.length; i++)
-              if (typeof arr[i] !== 'number')
-                return false;
+          if (!Array.isArray(arr))
+            return false;
 
-            return true;
-          }
+          for (var i = 0; i < arr.length; i++)
+            if (typeof arr[i] !== 'number')
+              return false;
 
-          return false;
+          return true;
         }
 
         input = JSON.parse(JSON.stringify(input), (key, value) => {
           if (!value) return value;
-          // console.log(isArrayAndAllNumbers(value), value)
           return isArrayAndAllNumbers(value) ? value.slice(0, 3) : value;
-          // console.log('value', value)
-          // return value;
         });
         delete input.properties;
         expect(ft).to.eql(input, i);
-        // if (i == 7)
-        //   break
-        //   // console.log(input, ft)
       }
     });
   });
