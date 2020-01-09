@@ -199,7 +199,7 @@ describe('inserting', () => {
         var [ c1, c2, c3 ] = input.coordinates;
 
         // insert
-        var [ id ] = await gj2s.db.point.insert(knex, input);
+        var id = await gj2s.db.point.insert(knex, input);
 
         // check
         var inserted = await knex('Point').select('*').where({ id }).first();

@@ -3,7 +3,7 @@ var { expect } = require('chai');
 var util = require('./util');
 var gj2s = require('../lib');
 
-describe.only('selecting', () => {
+describe/*.only*/('selecting', () => {
   var knex;
   before(async () => { knex = await util.getKnex(); });
   after(async () => { await knex.destroy(); });
@@ -64,10 +64,13 @@ describe.only('selecting', () => {
     });
   });
   
-  describe('MultiPoint', () => {
+  describe/*.only*/('MultiPoint', () => {
     it('should select MultiPoint', async () => {
       var inputs = await util.readAllInputsContains('MultiPoint');
-      expect(true).to.be.ok;
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        // var [ id ] = 
+      }
     });
   });
   
@@ -78,15 +81,17 @@ describe.only('selecting', () => {
     });
   });
   
-  describe('Point', () => {
+  describe/*.only*/('Point', () => {
     it('should select Point', async () => {
       var inputs = await util.readAllInputsContains('Point');
       for (var i = 0; i < inputs.length; i++) {
         var input = inputs[i];
-        var [ id ] = await gj2s.db.point.insert(knex, input);
+        var id = await gj2s.db.point.insert(knex, input);
 
-        var point = await gj2s.db.point.one(knex, id);
-        // console.log(point, input);
+        var point = await gj2s.db.point.oneAsGeojson(knex, id);
+        
+        input.coordinates = input.coordinates.slice(0, 3);
+        expect(point).to.eql(input);
       }
     });
   });
