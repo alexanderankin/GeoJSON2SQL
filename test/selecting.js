@@ -3,7 +3,7 @@ var { expect } = require('chai');
 var util = require('./util');
 var gj2s = require('../lib');
 
-describe('selecting', () => {
+describe.skip('selecting', () => {
   var knex;
   before(async () => { knex = await util.getKnex(); });
   after(async () => { await knex.destroy(); });
@@ -22,7 +22,7 @@ describe('selecting', () => {
     });
   });
   
-  describe.only('GeoJSON', () => {
+  describe('GeoJSON', () => {
     it('should select GeoJSON', async () => {
       var inputs = await util.readAllInputsContains('GeoJSON');
       for (var i = 0; i < inputs.length; i++) {

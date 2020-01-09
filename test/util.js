@@ -17,9 +17,9 @@ async function getKnex() {
     },
     useNullAsDefault: true
   });
-  // knex.on('query', function (data) {
-  //   console.log(knex.raw(data.sql, data.bindings).toString());
-  // })
+  knex.on('query', function (data) {
+    console.log(knex.raw(data.sql, data.bindings).toString());
+  })
   await up(knex);
   return knex;
 }
