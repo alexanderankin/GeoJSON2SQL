@@ -93,7 +93,7 @@ describe.only('selecting', () => {
     });
   });
   
-  describe.only('MultiPolygon', () => {
+  describe('MultiPolygon', () => {
     it('should select MultiPolygon', async () => {
       var inputs = await util.readAllInputsContains('MultiPolygon');
       for (var i = 0; i < inputs.length; i++) {
