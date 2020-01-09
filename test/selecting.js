@@ -8,10 +8,16 @@ describe.only('selecting', () => {
   before(async () => { knex = await util.getKnex(); });
   after(async () => { await knex.destroy(); });
 
-  describe.skip('Feature', () => {
+  describe.only('Feature', () => {
     it('should select Feature', async () => {
       var inputs = await util.readAllInputsContains('Feature');
-      expect(true).to.be.ok;
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        var id = await gj2s.db.feature.insert(knex, input);
+        var ft = await gj2s.db.feature.oneAsGeojson(knex, id);
+        console.log(ft);
+        break;
+      }
     });
   });
   
