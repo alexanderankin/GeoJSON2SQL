@@ -3,6 +3,17 @@ var { expect } = require('chai');
 var util = require('./util');
 var gj2s = require('../lib');
 
+function isArrayAndAllNumbers(arr) {
+  if (!arr || !Array.isArray(arr))
+    return false;
+
+  for (var i = 0; i < arr.length; i++)
+    if (typeof arr[i] !== 'number')
+      return false;
+
+  return true;
+}
+
 describe.only('selecting', () => {
   var knex;
   before(async () => { knex = await util.getKnex(); });
@@ -16,19 +27,7 @@ describe.only('selecting', () => {
         var id = await gj2s.db.feature.insert(knex, input);
         var ft = await gj2s.db.feature.oneAsGeojson(knex, id);
 
-        function isArrayAndAllNumbers(arr) {
-          if (!Array.isArray(arr))
-            return false;
-
-          for (var i = 0; i < arr.length; i++)
-            if (typeof arr[i] !== 'number')
-              return false;
-
-          return true;
-        }
-
         input = JSON.parse(JSON.stringify(input), (key, value) => {
-          if (!value) return value;
           return isArrayAndAllNumbers(value) ? value.slice(0, 3) : value;
         });
         delete input.properties;
@@ -37,10 +36,17 @@ describe.only('selecting', () => {
     });
   });
   
-  describe.skip('FeatureCollection', () => {
+  describe.only('FeatureCollection', () => {
     it('should select FeatureCollection', async () => {
       var inputs = await util.readAllInputsContains('FeatureCollection');
-      expect(true).to.be.ok;
+      for (var i = 0; i < inputs.length; i++) {
+        var input = inputs[i];
+        var id = await gj2s.db.featurecollection.insert(knex, input);
+        var fc = await gj2s.db.featurecollection.oneAsGeojson(knex, id);
+        console.log('fc', fc, 'input', input);
+        if (i > 1)
+          break;
+      }
     });
   });
   
